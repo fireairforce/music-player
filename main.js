@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 
 class AppWindow extends BrowserWindow {
   constructor(config, fileLocation) {
@@ -33,4 +33,15 @@ app.on("ready", () => {
       parent: mainWindow,
     },"./renderer/add.html");
   });
+  ipcMain.on('open-music-file', () => {
+    // 主渲染进程这边接收选择音乐消息后,使用electron的api打开一个获取文件的弹窗
+    dialog.showOpenDialog({
+      // 这里设置打开文件的属性 
+      properties:['openFile', 'multiSelections'],
+      // 选择的文件的类型
+      filters: [{ name:'Music', extensions: ['mp3']}]
+    }, (files) => {
+      console.log(files);
+    })
+  })
 });
