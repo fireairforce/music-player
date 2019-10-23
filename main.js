@@ -33,7 +33,7 @@ app.on("ready", () => {
       parent: mainWindow,
     },"./renderer/add.html");
   });
-  ipcMain.on('open-music-file', () => {
+  ipcMain.on('open-music-file', (e,arg) => {
     // 主渲染进程这边接收选择音乐消息后,使用electron的api打开一个获取文件的弹窗
     dialog.showOpenDialog({
       // 这里设置打开文件的属性 
@@ -41,7 +41,10 @@ app.on("ready", () => {
       // 选择的文件的类型
       filters: [{ name:'Music', extensions: ['mp3']}]
     }, (files) => {
-      console.log(files);
+      if(files) {
+        // 把选择到的文件数据传递到add.js那边去
+        e.sender.send('select-file',files);
+      }
     })
   })
 });
