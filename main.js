@@ -11,4 +11,18 @@
       },
     })
     mainWindow.loadFile('./renderer/index.html');
+    ipcMain.on('add-music-window',(e,arg)=>{
+      console.log(`get it`);
+      // 这里收到app.js那边传递过来的添加按钮之后，创建一个新的窗口
+      const addWindow = new BrowserWindow({
+        width: 500,
+        height: 400,
+        webPreferences: {
+          nodeIntegration: true
+        },
+        parent: mainWindow
+      })
+      addWindow.loadFile('./renderer/add.html')
+    })
+
   })
