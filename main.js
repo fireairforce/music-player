@@ -10,12 +10,5 @@
         nodeIntegration: true,
       },
     })
-    mainWindow.loadFile('./index.html');
-    //  用这边来监听renderer那边的值
-    ipcMain.on('message',(e,arg) => {
-        console.log(arg);
-        // 可以在event里面利用发送者这个属性往渲染进程上再回复一组数据
-        e.sender.send('reply','hello from main')
-        mainWindow.send('reply','hello from main')  
-    })
+    mainWindow.loadFile('./renderer/index.html');
   })
