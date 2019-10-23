@@ -1,6 +1,8 @@
-// 可以弹出nodejs的版本
-alert(process.versions.node);
+const { ipcRenderer } = require('electron');
 
 window.addEventListener('DOMContentLoaded', () => {
-    alert(`greeting from the DOM side`);
+    ipcRenderer.send('message', 'hello from renderer');
+    ipcRenderer.on('reply',(e,arg)=>{
+        document.getElementById('message').innerHTML = arg;
+    })
 })

@@ -1,24 +1,21 @@
-const { app, BrowserWindow } = require('electron');
+  const { app, BrowserWindow, ipcMain } = require('electron');
 
-// 表示electron已经完成加载好了，准备运行了
-app.on('ready', ()=> {
-   const mainWindow = new BrowserWindow({
-     width: 800,
-     height: 600,
-     webPreferences: {
-      //  表示我们在里面可以使用node的api
-       nodeIntegration: true,
-     }
-   })
-   mainWindow.loadFile('./index.html');
-   const secondWindow = new BrowserWindow({
-     width: 400,
-     height: 300,
-     webPreferences: {
-       nodeIntegration: true,
-     },
-    //  父窗口属性，当父窗口关闭的时候，子窗口也会跟着关闭
-     parent: mainWindow
-   })
-   secondWindow.loadFile('./second.html')
-})
+  // 表示electron已经完成加载好了，准备运行了
+  app.on('ready', ()=> {
+    const mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        //  表示我们在里面可以使用node的api
+        nodeIntegration: true,
+      },
+    })
+    mainWindow.loadFile('./index.html');
+    //  用这边来监听renderer那边的值
+    ipcMain.on('message',(e,arg) => {
+        console.log(arg);
+        // 可以在event里面利用发送者这个属性往渲染进程上再回复一组数据
+        e.sender.send('reply','hello from main')
+        mainWindow.send('reply','hello from main')  
+    })
+  })
