@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const Store = require('electron-store');
-// 使用方式和localStorage差不多
-const store = new Store();
+const DataStore = require('./renderer/musicDataStore');
+const myStore = new DataStore();
 
 class AppWindow extends BrowserWindow {
   constructor(config, fileLocation) {
@@ -36,6 +35,12 @@ app.on("ready", () => {
       parent: mainWindow,
     },"./renderer/add.html");
   });
+  // 在这里接受到传递过来的数据，然后用electron-store存储起来
+  ipcMain.on('add-tracks',(e,arg) => {
+    // console.log(arg);
+    const updatedTracks = myStore.addTracks(arg).getTracks();
+    console.log(updatedTracks);
+  })
   ipcMain.on('open-music-file', (e,arg) => {
     // 主渲染进程这边接收选择音乐消息后,使用electron的api打开一个获取文件的弹窗
     dialog.showOpenDialog({

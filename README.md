@@ -15,3 +15,9 @@
 - 使用本地文件
 
 这里使用`electron-store`来对数据进行一个存储
+
+可以使用
+```js
+// 这里能够打印出electron-store存储数据的文件目录位置
+// console.log(app.getPath('userData'));
+```

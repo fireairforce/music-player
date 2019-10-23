@@ -24,7 +24,7 @@ class DataStore extends Store {
                 path: item,
                 fileNames: path.basename(item)
             }
-        }).fileter(item=> {
+        }).filter(item=> {
             const currentTracksPath = this.getTracks().map(item => item.path);
             return currentTracksPath.indexOf(item.path) < 0;
         }) 
