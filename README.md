@@ -7,4 +7,4 @@
    "start": "nodemon --watch main.js --exec 'electron .'"
 },
 ```
-只要`main.js`一旦发生变化，就会去执行`electron .`这个脚本命令。
+只要`main.js`一旦发生变化，就会去执行`electron .`这个脚本命令。`main.js`使我们的主进程。
