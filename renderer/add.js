@@ -6,15 +6,16 @@ $("select-music").addEventListener("click", () => {
   ipcRenderer.send("open-music-file");
 });
 
-const renderListHTML = (path) => {
+const renderListHTML = (pathes) => {
     const musicList = $('musiclist')
-    const musicItemsHTML = path.reduce((html, music) => {
+    const musicItemsHTML = pathes.reduce((html, music) => {
         html += `<li class="list-group-item">${path.basename(music)}</li>`
         return html;
     },'')
     musicList.innerHTML = `<ul class="list-group">${musicItemsHTML}</ul>`
 }
 ipcRenderer.on("select-file", (e, arg) => {
+    console.log(arg);
   if (Array.isArray(arg)) {
     renderListHTML(arg);
   }
