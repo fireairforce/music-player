@@ -1,4 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const Store = require('electron-store');
+// 使用方式和localStorage差不多
+const store = new Store();
 
 class AppWindow extends BrowserWindow {
   constructor(config, fileLocation) {

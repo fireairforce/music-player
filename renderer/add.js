@@ -15,7 +15,6 @@ const renderListHTML = (pathes) => {
     musicList.innerHTML = `<ul class="list-group">${musicItemsHTML}</ul>`
 }
 ipcRenderer.on("select-file", (e, arg) => {
-    console.log(arg);
   if (Array.isArray(arg)) {
     renderListHTML(arg);
   }
