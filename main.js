@@ -27,6 +27,10 @@ class AppWindow extends BrowserWindow {
 app.on("ready", () => {
   const mainWindow = new AppWindow({},"./renderer/index.html");
   // mainWindow.loadFile("./renderer/index.html");
+  mainWindow.webContents.on('did-finish-load', () => {
+    console.log(`page did finished`);
+    mainWindow.send('getTracks', myStore.getTracks());
+  })
   ipcMain.on("add-music-window", () => {
     // 这里收到app.js那边传递过来的添加按钮之后，创建一个新的窗口
     const addWindow = new AppWindow({
@@ -39,7 +43,8 @@ app.on("ready", () => {
   ipcMain.on('add-tracks',(e,arg) => {
     // console.log(arg);
     const updatedTracks = myStore.addTracks(arg).getTracks();
-    console.log(updatedTracks);
+    // 拿到数据之后渲染到mainWindow里面
+    mainWindow.send('getTracks',updatedTracks)
   })
   ipcMain.on('open-music-file', (e,arg) => {
     // 主渲染进程这边接收选择音乐消息后,使用electron的api打开一个获取文件的弹窗
