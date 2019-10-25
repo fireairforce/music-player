@@ -1,8 +1,8 @@
 const { ipcRenderer } = require("electron");
 const { $ } = require("./helper");
 let musicAudio = new Audio();
-let allTracks
-let currentTrack
+let allTracks;
+let currentTrack;
 // 监听对应id值的dom节点上面的点击事件
 $("add-music-button").addEventListener("click", () => {
   ipcRenderer.send("add-music-window");
@@ -36,24 +36,33 @@ ipcRenderer.on("getTracks", (e, arg) => {
 });
 
 // 为播放器添加点击播放和暂停的事件
-$('tracksList').addEventListener('click',(e) => {
+$("tracksList").addEventListener("click", (e) => {
   e.preventDefault();
   const { dataset, classList } = e.target;
   const id = dataset && dataset.id;
-  if(id && classList.contains('fa-play')) {
+  if (id && classList.contains("fa-play")) {
     // 这里播放音乐
-    if(currentTrack && currentTrack.id === id) {
+    if (currentTrack && currentTrack.id === id) {
       // 继续播放音乐
+      musicAudio.play();
     } else {
       // 播放新的歌曲并还原之前的项目
+      currentTrack = allTracks.find((item) => item.id === id);
+      musicAudio.src = currentTrack.path;
+      musicAudio.play();
+      const resetIconEle = document.querySelector('.fa-pause');
+      if(resetIconEle) {
+        resetIconEle.classList.replace('fa-pause','fa-play');
+      }
     }
-    currentTrack = allTracks.find(item => item.id === id);
-    musicAudio.src = currentTrack.path;
-    musicAudio.play();
-    classList.replace('fa-play','fa-pause');
-  } else if(id && classList.contains('fa-pause')) {
+    //　开始播放状态
+    classList.replace("fa-play", "fa-pause");
+  } else if (id && classList.contains("fa-pause")) {
     // 这里处理暂停逻辑
-  } else if(id && classList.contains('fa-trash-alt')) {
-    // 这里发送时间　删除这条音乐
+    musicAudio.pause();
+    classList.replace("fa-pause", "fa-play");   
+  } else if (id && classList.contains("fa-trash-alt")) {
+    // 这里发送消息　删除这条音乐
+    ipcRenderer.send('delete-track',id);
   }
-})  
+});

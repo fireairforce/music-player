@@ -27,7 +27,6 @@ app.on("ready", () => {
   const mainWindow = new AppWindow({},"./renderer/index.html");
   // mainWindow.loadFile("./renderer/index.html");
   mainWindow.webContents.on('did-finish-load', () => {
-    console.log(`get it`);
     mainWindow.send('getTracks', myStore.getTracks());
   })
 
@@ -59,5 +58,10 @@ app.on("ready", () => {
         e.sender.send('select-file',files);
       }
     })
+  })
+  ipcMain.on('delete-track',(e,id) => {
+     const updatedTracks = myStore.deleteTracks(id).getTracks()
+    //  将删除完成的信息发送回去
+     mainWindow.send('getTracks',updatedTracks);
   })
 });
