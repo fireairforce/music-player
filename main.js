@@ -22,15 +22,15 @@ class AppWindow extends BrowserWindow {
     })
   }
 }
-
 // 表示electron已经完成加载好了，准备运行了
 app.on("ready", () => {
   const mainWindow = new AppWindow({},"./renderer/index.html");
   // mainWindow.loadFile("./renderer/index.html");
   mainWindow.webContents.on('did-finish-load', () => {
-    console.log(`page did finished`);
+    console.log(`get it`);
     mainWindow.send('getTracks', myStore.getTracks());
   })
+
   ipcMain.on("add-music-window", () => {
     // 这里收到app.js那边传递过来的添加按钮之后，创建一个新的窗口
     const addWindow = new AppWindow({
