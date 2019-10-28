@@ -4,7 +4,17 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon --watch main.js --exec 'electron .'"
+    "start": "nodemon --watch main.js --exec 'electron .'",
+    "dist": "build"
+  },
+  "build":{
+     "appId":"Music-Player",
+     "linux": {
+       "target": [
+         "AppImage",
+         "deb"
+       ]
+     }
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -18,6 +28,7 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^6.0.12",
+    "electron-builder": "^21.2.0",
     "nodemon": "^1.19.4"
   },
   "dependencies": {

@@ -42,7 +42,12 @@ const renderPlayerHTML = (name, duration) => {
   player.innerHTML = html;
 };
 
-const updateProgressHTML = (currentTime) => {
+const updateProgressHTML = (currentTime, duration) => {
+  // 计算播放的progress
+  const progress = Math.floor(currentTime / duration * 100);
+  const bar = $('player-progress');
+  bar.innerHTML = progress + '%';
+  bar.style.width = progress + '%'; 
   const seeker = $("current-seeker");
   seeker.innerHTML = convertDuration(currentTime);
 };
@@ -61,7 +66,7 @@ musicAudio.addEventListener("loadedmetadata", () => {
 
 musicAudio.addEventListener("timeupdate", () => {
   // 更新播放器状态
-  updateProgressHTML(musicAudio.currentTime);
+  updateProgressHTML(musicAudio.currentTime,musicAudio.duration);
 });
 
 // 为播放器添加点击播放和暂停的事件
