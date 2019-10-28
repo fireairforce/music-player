@@ -1,5 +1,6 @@
 const { ipcRenderer } = require("electron");
 const { $ } = require("./helper");
+const { convertDuration } = require("./helper");
 let musicAudio = new Audio();
 let allTracks;
 let currentTrack;
@@ -30,21 +31,21 @@ const renderListHTML = (tracks) => {
 };
 
 const renderPlayerHTML = (name, duration) => {
-  const player = $('player-status');
+  const player = $("player-status");
   const html = `<div class="col font-weight-bold">
      正在播放: ${name}
      </div>
      <div class="col">
-        <span id="current-seeker">00:00</span> / ${duration}
+        <span id="current-seeker">00:00</span> / ${convertDuration(duration)}
      </div>
-  `
+  `;
   player.innerHTML = html;
-}
+};
 
 const updateProgressHTML = (currentTime) => {
-  const seeker = $('current-seeker');
-  seeker.innerHTML = currentTime;
-}
+  const seeker = $("current-seeker");
+  seeker.innerHTML = convertDuration(currentTime);
+};
 
 ipcRenderer.on("getTracks", (e, arg) => {
   // 这里就拿到store里面的存储数据了
@@ -53,15 +54,15 @@ ipcRenderer.on("getTracks", (e, arg) => {
   renderListHTML(arg);
 });
 // 这里监听属性加载事件
-musicAudio.addEventListener('loadedmetadata',() => {
+musicAudio.addEventListener("loadedmetadata", () => {
   // 渲染播放状态
   renderPlayerHTML(currentTrack.fileNames, musicAudio.duration);
-})
+});
 
-musicAudio.addEventListener('timeupdate', ()=> {
+musicAudio.addEventListener("timeupdate", () => {
   // 更新播放器状态
-   updateProgressHTML(musicAudio.currentTime);
-})
+  updateProgressHTML(musicAudio.currentTime);
+});
 
 // 为播放器添加点击播放和暂停的事件
 $("tracksList").addEventListener("click", (e) => {
@@ -78,9 +79,9 @@ $("tracksList").addEventListener("click", (e) => {
       currentTrack = allTracks.find((item) => item.id === id);
       musicAudio.src = currentTrack.path;
       musicAudio.play();
-      const resetIconEle = document.querySelector('.fa-pause');
-      if(resetIconEle) {
-        resetIconEle.classList.replace('fa-pause','fa-play');
+      const resetIconEle = document.querySelector(".fa-pause");
+      if (resetIconEle) {
+        resetIconEle.classList.replace("fa-pause", "fa-play");
       }
     }
     //　开始播放状态
@@ -88,9 +89,9 @@ $("tracksList").addEventListener("click", (e) => {
   } else if (id && classList.contains("fa-pause")) {
     // 这里处理暂停逻辑
     musicAudio.pause();
-    classList.replace("fa-pause", "fa-play");   
+    classList.replace("fa-pause", "fa-play");
   } else if (id && classList.contains("fa-trash-alt")) {
     // 这里发送消息　删除这条音乐
-    ipcRenderer.send('delete-track',id);
+    ipcRenderer.send("delete-track", id);
   }
 });
