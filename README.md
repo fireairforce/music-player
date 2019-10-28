@@ -50,3 +50,5 @@ horn.addEventListener('loadeddata', () => {
 - JS中使用`HTMLElement`的`dataset`属性来获取(具体可以参考音乐播放那里)
 
 事件的绑定上面我们使用事件的冒泡机制来完成事件的代理功能。
+
+**遇见复杂的问题可以使用流程图来解决**

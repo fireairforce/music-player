@@ -28,12 +28,40 @@ const renderListHTML = (tracks) => {
     ? `<ul class="list-group">${tracksListHTML}</ul>`
     : emptyHtml;
 };
+
+const renderPlayerHTML = (name, duration) => {
+  const player = $('player-status');
+  const html = `<div class="col font-weight-bold">
+     正在播放: ${name}
+     </div>
+     <div class="col">
+        <span id="current-seeker">00:00</span> / ${duration}
+     </div>
+  `
+  player.innerHTML = html;
+}
+
+const updateProgressHTML = (currentTime) => {
+  const seeker = $('current-seeker');
+  seeker.innerHTML = currentTime;
+}
+
 ipcRenderer.on("getTracks", (e, arg) => {
   // 这里就拿到store里面的存储数据了
   // console.log(`receive tracks`, arg);
   allTracks = arg;
   renderListHTML(arg);
 });
+// 这里监听属性加载事件
+musicAudio.addEventListener('loadedmetadata',() => {
+  // 渲染播放状态
+  renderPlayerHTML(currentTrack.fileNames, musicAudio.duration);
+})
+
+musicAudio.addEventListener('timeupdate', ()=> {
+  // 更新播放器状态
+   updateProgressHTML(musicAudio.currentTime);
+})
 
 // 为播放器添加点击播放和暂停的事件
 $("tracksList").addEventListener("click", (e) => {
