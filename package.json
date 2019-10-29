@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "nodemon --watch main.js --exec 'electron .'",
-    "dist": "build"
+    "build": "electron-builder"
   },
   "build":{
      "appId":"Music-Player",
@@ -14,7 +14,29 @@
          "AppImage",
          "deb"
        ]
-     }
+     },
+     "dmg": {
+      "background": "build/appdmg.png",
+      "icon": "build/icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 380,
+          "y": 280,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
+    }
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
